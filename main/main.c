@@ -19,6 +19,13 @@
 
 #define TAG "main"
 
+#define TFT_RST 4
+#define TFT_RS  5
+#define TFT_CS  22  // SS
+#define TFT_SDI 23  // MOSI
+#define TFT_CLK 18  // SCK
+#define TFT_LED 0   // 0 if wired to +5V directly
+
 void wifi_connected(void * param)
 {
     ESP_LOGD(TAG, "Wifi connected!");
@@ -32,5 +39,15 @@ void wifi_disconnected(void * param)
 void app_main()
 {
     ESP_LOGD(TAG, "Test!");
-    wifi_manager_start_task(wifi_connected, NULL, wifi_disconnected, NULL);
+    //wifi_manager_start_task(wifi_connected, NULL, wifi_disconnected, NULL);
+    UG_GetGUI();
+    ili9225_init(TFT_SDI, 
+    	TFT_CLK,
+    	TFT_CS,
+    	TFT_RST,
+    	TFT_RS,
+    	VSPI_HOST,
+    	2,
+    	SPI_MASTER_FREQ_26M);
 }
+	
