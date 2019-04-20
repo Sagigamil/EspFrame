@@ -1,3 +1,9 @@
 [submodule "components/wifi-manager"]
 	path = components/wifi-manager
 	url = https://github.com/Sagigamil/wifi-manager.git
+[submodule "components/ugui"]
+	path = components/ugui
+	url = https://github.com/Sagigamil/ugui.git
+[submodule "components/cpp-utils"]
+	path = components/cpp-utils
+	url = https://github.com/Sagigamil/cpp-utils.git

@@ -14,6 +14,8 @@
 #include "esp_log.h"
 
 #include "wifi_manager_task.h"
+#include "ili9225_driver.h"
+#include "ugui.h"
 
 #define TAG "main"
 
