@@ -5,5 +5,8 @@
 
 PROJECT_NAME := EspFrame
 
+CFLAGS := -DMINIZ_NO_TIME -DESP32
+CPPFLAGS := -DMINIZ_NO_TIME -DESP32
+
 include $(IDF_PATH)/make/project.mk
 
