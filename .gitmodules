@@ -1,6 +1,3 @@
 [submodule "components/wifi-manager"]
 	path = components/wifi-manager
 	url = https://github.com/Sagigamil/wifi-manager.git
-[submodule "components/google-drive"]
-	path = components/google-drive
-	url = https://github.com/google/google-api-cpp-client.git
