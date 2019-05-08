@@ -105,7 +105,7 @@ void TFT_22_ILI9225::_spi_init()
     buscfg.sclk_io_num = _clk;
     buscfg.quadwp_io_num = -1;
     buscfg.quadhd_io_num = -1;
-    buscfg.max_transfer_sz = 32 * 8; //in bits (this is for 32 bytes. adjust as needed)
+    buscfg.max_transfer_sz = ILI9225_LCD_WIDTH * ILI9225_LCD_HEIGHT * 8 * 2; //in bits (this is for 32 bytes. adjust as needed)
     buscfg.flags = SPICOMMON_BUSFLAG_MASTER;
 
     devcfg.command_bits = 0;
@@ -342,15 +342,9 @@ void TFT_22_ILI9225::_setWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t 
     endWrite();
 }
 
-void TFT_22_ILI9225::drawBitmapImage(const uint16_t * image)
+void TFT_22_ILI9225::drawBitmapImage(uint16_t * image)
 {
-    for (uint16_t i = 0; i < ILI9225_LCD_HEIGHT; i++)
-    {
-        for (uint16_t j = 0; j < ILI9225_LCD_WIDTH; j++)
-        {
-            _writeData16(image[ILI9225_LCD_WIDTH * i + j]);
-        }
-    }
+    _spiWrite(image, ILI9225_LCD_HEIGHT * ILI9225_LCD_WIDTH * 2);
 }
 
 void TFT_22_ILI9225::_resetWindow() {

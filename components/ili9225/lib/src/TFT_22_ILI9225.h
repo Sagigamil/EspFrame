@@ -125,7 +125,7 @@ class TFT_22_ILI9225 {
         /// @param    blue blue component, 0x00..0xff
         void splitColor(uint16_t rgb, uint8_t &red, uint8_t &green, uint8_t &blue);
 
-        void drawBitmapImage(const uint16_t * image);
+        void drawBitmapImage(uint16_t * image);
         void setWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
     private:
         
