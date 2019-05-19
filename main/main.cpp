@@ -13,6 +13,7 @@
 #include "esp_spi_flash.h"
 #include "esp_log.h"
 
+#include "FreeRTOS.h"
 #include "wifi_manager_task.h"
 #include "TFT_22_ILI9225.h"
 #include "ugui.h"
@@ -26,7 +27,7 @@
 #define TFT_CLK 18  // SCK
 #define TFT_LED 0   // 0 if wired to +5V directly
 
-TFT_22_ILI9225 tft = TFT_22_ILI9225(TFT_RST, TFT_RS, TFT_CS, TFT_SDI, TFT_CLK, TFT_LED);
+TFT_22_ILI9225 tft = TFT_22_ILI9225(TFT_RST, TFT_RS, TFT_CS, TFT_SDI, TFT_CLK);
 
 
 
@@ -275,6 +276,7 @@ void program()
 
     tft.setWindow(0, 0, ILI9225_LCD_WIDTH, ILI9225_LCD_HEIGHT);
     tft.drawBitmapImage((uint16_t *)photo);
+    FreeRTOS::sleep(1000);
 }
 
 extern "C" void app_main()
