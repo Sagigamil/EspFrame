@@ -7,3 +7,6 @@
 [submodule "components/cpp-utils"]
 	path = components/cpp-utils
 	url = https://github.com/Sagigamil/cpp-utils.git
+[submodule "components/ftp-client"]
+	path = components/ftp-client
+	url = https://github.com/Sagigamil/ftp-client-cpp.git
