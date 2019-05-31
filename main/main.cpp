@@ -20,6 +20,7 @@
 #include "FreeRTOS.h"
 #include "TFT_22_ILI9225.h"
 #include "ugui.h"
+#include "FTPSync.h"
 
 extern "C"
 {
@@ -41,9 +42,17 @@ extern "C"
 #define PIN_NUM_CS   GPIO_NUM_13
 
 TFT_22_ILI9225 tft = TFT_22_ILI9225(TFT_RST, TFT_RS, TFT_CS, TFT_SDI, TFT_CLK);
+FreeRTOS::EventFlags flags;
+
+
+void ftp_log_message(const std::string& output)
+{
+  std::cout << output << std::endl;
+}
 
 void wifi_connected(void * param)
 {
+  flags.set(1);
   ESP_LOGI(TAG, "Wifi Connected!");
 }
 
@@ -87,11 +96,56 @@ void init_fs()
     sdmmc_card_print_info(stdout, card);
 }
 
+// CFTPClient ftp_client(ftp_log_message);
+
+// void init_ftp()
+// {
+//   if (!ftp_client.init())
+//   {
+//     ESP_LOGE(TAG, "Error init ftp client");
+//   }
+
+//   const bool result = ftp_client.InitSession("145.14.144.209",
+//                                              21,
+//                                              "sharedfolder",
+//                                              "0502117580");
+//   if (!result)
+//   {
+//     ESP_LOGE(TAG, "Cannot initialize ftp client");
+//     return;
+//   }
+
+//   ESP_LOGI(TAG, "FTP client initialized successfully");
+
+//   std::string file_list;
+//   ftp_client.List("/", file_list);
+//   std::cout << file_list << std::endl;
+//   ftp_client.DownloadFile("/sdcard/file.txt", "/shared/file.txt");
+// }
+
+FTPSync ftp_sync;
+
+void sync_folder()
+{
+    ftp_sync.connect("145.14.144.209",
+                     21,
+                     "sharedfolder",
+                     "0502117580",
+                     "/shared/",
+                     "/sdcard/");
+    ftp_sync.sync();
+}
+
 void program()
 {
     nvs_flash_init();
+    esp_log_level_set("dns_server", ESP_LOG_DEBUG);        // set all components to ERROR level
     wifi_manager_start_task(wifi_connected, NULL, wifi_disconnected, NULL);
     init_fs();
+    flags.wait(1);
+    ESP_LOGI(TAG, "Initialize FTP client");
+    sync_folder();
+    // init_ftp();
 }
 
 extern "C" void app_main()
