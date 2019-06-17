@@ -94,37 +94,11 @@ void init_fs()
 
     // Card has been initialized, print its properties
     sdmmc_card_print_info(stdout, card);
+    ESP_LOGI(TAG, "Initialize FTP client");
 }
 
-// CFTPClient ftp_client(ftp_log_message);
-
-// void init_ftp()
-// {
-//   if (!ftp_client.init())
-//   {
-//     ESP_LOGE(TAG, "Error init ftp client");
-//   }
-
-//   const bool result = ftp_client.InitSession("145.14.144.209",
-//                                              21,
-//                                              "sharedfolder",
-//                                              "0502117580");
-//   if (!result)
-//   {
-//     ESP_LOGE(TAG, "Cannot initialize ftp client");
-//     return;
-//   }
-
-//   ESP_LOGI(TAG, "FTP client initialized successfully");
-
-//   std::string file_list;
-//   ftp_client.List("/", file_list);
-//   std::cout << file_list << std::endl;
-//   ftp_client.DownloadFile("/sdcard/file.txt", "/shared/file.txt");
-// }
 
 FTPSync ftp_sync;
-
 void sync_folder()
 {
     ftp_sync.connect("145.14.144.209",
@@ -136,16 +110,27 @@ void sync_folder()
     ftp_sync.sync();
 }
 
+void sync_handle()
+{
+    /* Connect to wifi */
+    esp_log_level_set("dns_server", ESP_LOG_DEBUG);
+    wifi_manager_start_task(wifi_connected, NULL, wifi_disconnected, NULL);
+    flags.wait(1);
+    /* Sync the folder */
+    sync_folder();
+}
+
+void show_random_image()
+{
+    
+}
+
 void program()
 {
     nvs_flash_init();
-    esp_log_level_set("dns_server", ESP_LOG_DEBUG);        // set all components to ERROR level
-    wifi_manager_start_task(wifi_connected, NULL, wifi_disconnected, NULL);
     init_fs();
-    flags.wait(1);
-    ESP_LOGI(TAG, "Initialize FTP client");
-    sync_folder();
-    // init_ftp();
+
+    sync_handle();
 }
 
 extern "C" void app_main()
