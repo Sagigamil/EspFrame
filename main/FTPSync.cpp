@@ -61,7 +61,8 @@ bool FTPSync::sync()
 
 	while(std::getline(input, segment, '\n'))
 	{
-	    if (segment == "." || segment == "..")
+	    if (segment == "." ||
+	        segment == "..")
 	    {
 	    	continue;
 	    }
@@ -77,7 +78,6 @@ bool FTPSync::sync()
 
 	    m_ftp_client.DownloadFile(local_path, current_file_name);
 	}
-
 
 	return result;
 }
