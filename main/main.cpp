@@ -21,6 +21,8 @@
 #include "TFT_22_ILI9225.h"
 #include "ugui.h"
 #include "FTPSync.h"
+#include "zupply.hpp"
+using namespace zz;
 
 extern "C"
 {
@@ -122,7 +124,7 @@ void sync_handle()
 
 void show_random_image()
 {
-    
+   Image img("/sdcard/bitmap.jpg");
 }
 
 void program()
@@ -131,6 +133,8 @@ void program()
     init_fs();
 
     sync_handle();
+
+    show_random_image();
 }
 
 extern "C" void app_main()

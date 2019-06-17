@@ -75,6 +75,10 @@ bool FTPSync::sync()
 			std::cout << "File " << local_path << " already exist." << std::endl;
 			continue;
 		}
+		else
+		{
+			std::cout << "Downloading " << current_file_name << "to " << local_path << std::endl;
+		}
 
 	    m_ftp_client.DownloadFile(local_path, current_file_name);
 	}
