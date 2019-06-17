@@ -11407,11 +11407,6 @@ namespace zz
 
 		int is_atty()
 		{
-#if ZUPPLY_OS_WINDOWS
-			return _isatty(_fileno(stdout));
-#elif ZUPPLY_OS_UNIX
-			return isatty(fileno(stdout));
-#endif
 			return 0;
 		}
 
@@ -11801,20 +11796,7 @@ namespace zz
 				return wstring_to_utf8(ret);
 			}
 #elif _GNU_SOURCE
-			char *buffer = realpath(".", nullptr);
-			if (buffer == nullptr)
-			{
-				// failed
-				log::detail::zupply_internal_warn("Unable to get current working directory!");
-				return std::string(".");
-			}
-			else
-			{
-				// success
-				std::string ret(buffer);
-				free(buffer);
-				return ret;
-			}
+			return std::string(".");
 #else
 			char *buffer = getcwd(nullptr, 0);
 			if (buffer == nullptr)
@@ -11915,7 +11897,7 @@ namespace zz
 				return wstring_to_utf8(ret);
 			}
 #elif ZUPPLY_OS_UNIX
-			char *buffer = realpath(reletivePath.c_str(), nullptr);
+			char *buffer = ".";
 			if (buffer == nullptr)
 			{
 				// failed
