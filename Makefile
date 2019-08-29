@@ -3,7 +3,6 @@
 # project subdirectory.
 #
 
-IDF_PATH = /mnt/h/esp/esp-idf-last-release
 
 PROJECT_NAME := EspFrame
 

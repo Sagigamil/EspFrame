@@ -130,8 +130,9 @@ class TFT_22_ILI9225 {
     private:
         
         void _spi_init();
-        void _spiWrite(void * data, size_t size);
+        void _spiWrite(const void * data, size_t size);
         void _spiWrite(uint8_t v);
+        void _spiWriteAsync(uint8_t v);
         void _spiWriteCommand(uint8_t c);
         void _spiWriteData(uint8_t d);
 
