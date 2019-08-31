@@ -105,7 +105,7 @@ void TFT_22_ILI9225::_spi_init()
     buscfg.sclk_io_num = _clk;
     buscfg.quadwp_io_num = -1;
     buscfg.quadhd_io_num = -1;
-    buscfg.max_transfer_sz = 0;
+    buscfg.max_transfer_sz = ILI9225_LCD_WIDTH * ILI9225_LCD_HEIGHT * 2;
     buscfg.flags = SPICOMMON_BUSFLAG_MASTER;
 
     devcfg.command_bits = 0;
@@ -119,7 +119,7 @@ void TFT_22_ILI9225::_spi_init()
     devcfg.input_delay_ns = 0;
     devcfg.spics_io_num = -1;
     devcfg.flags = 0;
-    devcfg.queue_size = 4096;
+    devcfg.queue_size = 1;
     devcfg.pre_cb = NULL;
     devcfg.post_cb = NULL;
 
@@ -342,15 +342,24 @@ void TFT_22_ILI9225::_setWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t 
     endWrite();
 }
 
+static uint16_t buffer[ILI9225_LCD_WIDTH * ILI9225_LCD_HEIGHT];
+
 void TFT_22_ILI9225::drawBitmapImage(const uint16_t * image)
 { 
-    for (uint16_t i = 0; i < ILI9225_LCD_HEIGHT; i++)
+    SPI_DC_HIGH();
+    SPI_CS_LOW();
+
+    for (uint16_t i = 0; i < ILI9225_LCD_HEIGHT * ILI9225_LCD_WIDTH; i++)
     {
-        for (uint16_t j = 0; j < ILI9225_LCD_WIDTH; j++)
-        {
-            _writeData16(image[ILI9225_LCD_WIDTH * i + j]);
-        }
+        uint16_t data = image[i];
+        data = SPI_SWAP_DATA_TX(data, sizeof(data) * 8);
+        buffer[i] = data;
     }
+
+    _spiWrite(buffer, sizeof(buffer)); 
+
+    SPI_CS_HIGH();
+
 }
 
 void TFT_22_ILI9225::_resetWindow() {
